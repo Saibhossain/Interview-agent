@@ -83,3 +83,52 @@ ai-interview-agent/
     ├── test_graph.py         
     ├── test_nodes.py         
     └── test_cv_parser.py
+```
+
+🚀 Getting Started
+Prerequisites
+Python 3.10+
+
+Google Gemini API Key
+
+Installation
+Clone the repository:
+
+Bash
+git clone [https://github.com/yourusername/ai-interview-agent.git](https://github.com/yourusername/ai-interview-agent.git)
+cd ai-interview-agent
+Create a virtual environment:
+
+Bash
+python -m venv venv
+source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+Install dependencies:
+
+Bash
+pip install -r requirements.txt
+Set Environment Variables:
+Copy the example environment file and add your Google API Key.
+
+Bash
+cp .env.example .env
+Inside .env:
+
+Code snippet
+GOOGLE_API_KEY=your_gemini_api_key_here
+Usage
+Run the application:
+
+Bash
+python main.py
+(If you are using Streamlit for the UI, run streamlit run main.py instead).
+
+🛠️ Technologies Used
+LangGraph: For orchestrating the non-linear interview state machine.
+
+LangChain: For prompt management and document loading.
+
+Google Gemini API: Powered by gemini-2.5-flash-lite for high-speed, structured reasoning.
+
+Pydantic: For strict structured output validation from the LLM.
+
+Streamlit: (Optional) For the interactive web UI.
