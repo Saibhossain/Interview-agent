@@ -129,3 +129,9 @@ Run the application:
 * Pydantic: For strict structured output validation from the LLM.
 
 * Streamlit: (Optional) For the interactive web UI.
+
+
+## 📫 Contact
+As an AI Researcher, I am always open to collaboration.
+- **GitHub:** [SaibHossain](https://github.com/Saibhossain)
+- **LinkedIn:** [SaibHossain](https://www.linkedin.com/in/saib-hossain-182834229/)
