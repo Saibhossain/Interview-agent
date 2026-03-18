@@ -6,7 +6,7 @@ import operator
 
 
 class InterviewPlan(BaseModel):
-    topics: List[str] = Field(description="3-4 specific technical or behavioral topics to cover.")
+    topics: List[str] = Field(description="3-5 specific technical or behavioral topics to cover.")
 
 class IntentAnalysis(BaseModel):
     intent: Literal["evaluate", "clarify"] = Field(description="Return 'clarify' if asking a question, 'evaluate' if answering.")
