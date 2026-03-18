@@ -1,14 +1,15 @@
-from graph.state import InterviewState
-from config.llm_config import get_llm
-from langchain_core.messages import AIMessage
 from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.messages import AIMessage
+
+from config.llm_config import get_llm
+from config.settings import CV_CONTEXT_LIMIT
+from graph.state import InterviewState
+from prompts.interview_prompts import ASK_MAIN_QUESTION_PROMPT
 
 
 def ask_main_question_node(state: InterviewState):
     llm = get_llm()
     topic = state.get("current_topic")
-    prompt = ChatPromptTemplate.from_template(
-        "CV context: {cv_text}\nCurrent topic: {topic}.\nAsk ONE engaging, open-ended interview question about this topic. No pleasantries."
-    )
-    response = (prompt | llm).invoke({"cv_text": state["cv_text"][:1000], "topic": topic})
+    prompt = ChatPromptTemplate.from_template(ASK_MAIN_QUESTION_PROMPT)
+    response = (prompt | llm).invoke({"cv_text": state["cv_text"][:CV_CONTEXT_LIMIT], "topic": topic})
     return {"messages": [AIMessage(content=response.content)]}
