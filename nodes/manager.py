@@ -1,4 +1,4 @@
-
+from graph.state import InterviewState
 
 def manager_node(state: InterviewState):
     plan = state.get("interview_plan", [])
