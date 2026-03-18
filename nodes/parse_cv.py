@@ -1,11 +1,12 @@
 from graph.state import InterviewState
+from services.pdf_loader import load_pdf_text
+from services.cv_parser import clean_cv_text
 
-from langchain_community.document_loaders import PyPDFLoader
 
 def parse_cv_node(state: InterviewState):
     try:
-        loader = PyPDFLoader(state["pdf_path"])
-        cv_text = "\n".join([page.page_content for page in loader.load()])
+        cv_text = load_pdf_text(state["pdf_path"])
+        cv_text = clean_cv_text(cv_text)
         return {"cv_text": cv_text}
     except Exception:
         return {"cv_text": "Error reading CV. Ask general software engineering questions."}
