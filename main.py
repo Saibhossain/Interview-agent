@@ -206,9 +206,7 @@ else:
                 logger.info("Graph advanced after user input.")
                 st.rerun()
 
-        # -------------------------------
-        # Debug Panel
-        # -------------------------------
+
         if st.session_state.debug_mode:
             st.divider()
             with st.expander("🛠 Debug State", expanded=False):
