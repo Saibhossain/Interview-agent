@@ -3,6 +3,7 @@
 An advanced, non-linear AI interview simulator built with **LangGraph** and **Google Gemini**. 
 
 Unlike standard linear chatbots, this agent uses a dynamic state graph to simulate a realistic technical interview. It parses a candidate's CV, dynamically generates a custom interview agenda, evaluates answers in real-time, handles clarifying questions, and drills down with follow-ups when answers lack depth.
+![img](tests/interview_test_graph_architecture.png)
 
 ## ✨ Features
 
