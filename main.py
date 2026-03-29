@@ -9,6 +9,7 @@ from graph.builder import build_graph
 from utils.helpers import ensure_dir, generate_thread_id
 from utils.logger import get_logger
 from utils.debug_view import format_state_debug
+from services.speech_service import speech_to_text,text_to_speech
 
 logger = get_logger("main")
 
@@ -41,6 +42,12 @@ if "initial_plan_len" not in st.session_state:
 
 if "debug_mode" not in st.session_state:
     st.session_state.debug_mode = True
+
+if "last_spoken_text" not in st.session_state:
+    st.session_state.last_spoken_text = ""
+
+if "latest_tts_path" not in st.session_state:
+    st.session_state.latest_tts_path = None
 
 thread = {"configurable": {"thread_id": st.session_state.thread_id}}
 
@@ -166,18 +173,40 @@ if not st.session_state.started:
 else:
     try:
         state = graph.get_state(thread)
+        last_ai_message = None
 
         # -------------------------------
         # Chat History
         # -------------------------------
         st.subheader("💬 Interview")
 
-        if state and state.values and state.values.get("messages"):
-            for msg in state.values["messages"]:
+        messages = state.values.get("messages", []) if state and state.values else []
+
+        if messages:
+            for msg in messages:
                 role = "assistant" if isinstance(msg, AIMessage) else "user"
                 avatar = "🎙️" if role == "assistant" else "🧑"
                 with st.chat_message(role, avatar=avatar):
                     st.markdown(msg.content)
+
+            # Speak only the latest AI message
+            if isinstance(messages[-1], AIMessage):
+                latest_ai = messages[-1].content
+
+                if st.session_state.last_spoken_text != latest_ai:
+                    try:
+                        tts_path = text_to_speech(latest_ai)
+                        st.session_state.latest_tts_path = tts_path
+                        st.session_state.last_spoken_text = latest_ai
+                    except Exception as e:
+                        st.warning(f"TTS error: {e}")
+
+                if st.session_state.latest_tts_path:
+                    try:
+                        with open(st.session_state.latest_tts_path, "rb") as f:
+                            st.audio(f.read(), format="audio/wav")
+                    except Exception as e:
+                        st.warning(f"Audio playback failed: {e}")
 
         # -------------------------------
         # Completion Status
@@ -188,12 +217,34 @@ else:
             st.success("Interview completed.")
             st.chat_input("Interview Complete.", disabled=True)
         else:
-            user_input = st.chat_input("Type your answer here...")
+            st.markdown("### Answer the question")
+
+            text_answer = st.chat_input("Type your answer here...")
+            audio_answer = st.audio_input("Or record your answer by voice")
+
+            user_input = None
+
+            # Priority 1: typed answer
+            if text_answer:
+                user_input = text_answer
+
+            # Priority 2: voice answer
+            elif audio_answer is not None:
+                try:
+                    audio_bytes = audio_answer.read()
+                    transcribed_text = speech_to_text(audio_bytes)
+
+                    if transcribed_text and transcribed_text.strip():
+                        st.info(f"🎤 Transcribed: {transcribed_text}")
+                        user_input = transcribed_text
+                    else:
+                        st.warning("Could not understand the audio clearly. Please try again.")
+                except Exception as e:
+                    st.error(f"Speech-to-text failed: {e}")
 
             if user_input:
                 logger.info("User submitted answer. thread_id=%s", st.session_state.thread_id)
 
-                # show instantly
                 with st.chat_message("user", avatar="🧑"):
                     st.markdown(user_input)
 
@@ -205,7 +256,6 @@ else:
 
                 logger.info("Graph advanced after user input.")
                 st.rerun()
-
 
         if st.session_state.debug_mode:
             st.divider()
