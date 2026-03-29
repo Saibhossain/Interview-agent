@@ -6,7 +6,7 @@ from prompts.interview_prompts import FOLLOWUP_PROMPT
 
 
 def ask_followup_node(state: InterviewState):
-    llm = get_llm()
+    llm = get_llm("followup")
     answer = state["messages"][-1].content
     prompt = ChatPromptTemplate.from_template(FOLLOWUP_PROMPT)
     response = (prompt | llm).invoke({"answer": answer})

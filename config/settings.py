@@ -13,4 +13,6 @@ DEFAULT_MODEL = "google_genai:gemini-2.5-flash-lite"
 CV_CONTEXT_LIMIT = 1000
 MAX_FOLLOWUPS = 1
 
-OLLAMA_MODEL="gemma3:1b"
+OLLAMA_gemma1b="gemma3:1b"
+OLLAMA_R11_5b="deepseek-r1:1.5b"
+OLLAMA_qwen3b="qwen2.5:3b"

@@ -7,7 +7,7 @@ from prompts.interview_prompts import CLARIFICATION_PROMPT
 
 
 def handle_clarification_node(state: InterviewState):
-    llm = get_llm()
+    llm = get_llm("clarify")
     ai_msg = state["messages"][-2].content
     human_msg = state["messages"][-1].content
     prompt = ChatPromptTemplate.from_template(CLARIFICATION_PROMPT)

@@ -5,7 +5,7 @@ from graph.state import InterviewState, IntentAnalysis
 from prompts.interview_prompts import ANALYZE_INPUT_PROMPT
 
 def analyze_input_node(state: InterviewState):
-    llm = get_llm()
+    llm = get_llm("intent")
     last_message = state["messages"][-1].content
     prompt = ChatPromptTemplate.from_template(ANALYZE_INPUT_PROMPT)
     result = (prompt | llm.with_structured_output(IntentAnalysis)).invoke({"message": last_message})

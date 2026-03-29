@@ -5,7 +5,7 @@ from prompts.planner_prompts import PLAN_INTERVIEW_PROMPT
 from langchain_core.prompts import ChatPromptTemplate
 
 def plan_interview_node(state: InterviewState):
-    llm = get_llm()
+    llm = get_llm("plan")
     prompt = ChatPromptTemplate.from_template(PLAN_INTERVIEW_PROMPT)
     chain = prompt | llm.with_structured_output(InterviewPlan)
     result = chain.invoke({"cv_text": state["cv_text"]})

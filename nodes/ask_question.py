@@ -8,7 +8,7 @@ from prompts.interview_prompts import ASK_MAIN_QUESTION_PROMPT
 
 
 def ask_main_question_node(state: InterviewState):
-    llm = get_llm()
+    llm = get_llm("question")
     topic = state.get("current_topic")
     prompt = ChatPromptTemplate.from_template(ASK_MAIN_QUESTION_PROMPT)
     response = (prompt | llm).invoke({"cv_text": state["cv_text"][:CV_CONTEXT_LIMIT], "topic": topic})

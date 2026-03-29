@@ -5,7 +5,7 @@ from langchain_core.prompts import ChatPromptTemplate
 from prompts.evaluation_prompts import EVALUATE_ANSWER_PROMPT
 
 def evaluate_answer_node(state: InterviewState):
-    llm = get_llm()
+    llm = get_llm("evaluate")
     question = [m.content for m in state["messages"] if isinstance(m, AIMessage)][-1]
     answer = state["messages"][-1].content
     prompt = ChatPromptTemplate.from_template(EVALUATE_ANSWER_PROMPT)
